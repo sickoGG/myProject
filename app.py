@@ -60,13 +60,12 @@ def upload():
 # an image, that image is going to be show after the upload
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 
 @app.route('/claim', methods=['POST'])
 def predict():
-    image_path = max(glob.glob(r'uploads\*.jpg'), key=os.path.getctime)
+    image_path = max(glob.glob(r'uploads\*'), key=os.path.getctime)
     with tf.Graph().as_default():
         human_string, score= prediction(image_path)
     print('model one value' + str(human_string))
