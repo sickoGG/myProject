@@ -1,6 +1,6 @@
-# Estimating car damage using Deep Learning Algorithms: Image Processing
+# Drug Monitoring System for Patient with Common Cold
 
-This tutorial will help you to install and set up the car damage detector web application on your system
+    - This tutorial will help you to install and set up the car damage detector web application on your system
 
 # Installation Steps for running on your local machine:
 
@@ -17,12 +17,7 @@ This tutorial will help you to install and set up the car damage detector web ap
     ```
 - Browse the application on (http://localhost:5000/)
 
-# (Optional) Accessing direclty on web browser using internet:
-- You can skip the above steps and browse directly on your web browser using [Car Damage Detector](https://car-damage-detector.herokuapp.com/)
-
-
-
-#### Author
+#### Reference
 
 **Ravi Ranjan**
 
