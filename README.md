@@ -1,7 +1,5 @@
 # Drug Monitoring System for Patient with Common Cold
 
-    - This tutorial will help you to install and set up the car damage detector web application on your system
-
 # Installation Steps for running on your local machine:
 
   - Download and install Python 3.6 or Anaconda 4 on your system as per your operating system [Download Python](https://www.python.org/downloads/release/python-360/) [Download Anaconda 4](https://www.anaconda.com/download/)
