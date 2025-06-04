@@ -9,7 +9,7 @@ import time
 # will be used to redirect the user once the upload is done 
 # and send_from_directory will help us to send/show on the
 # browser the file that the user just uploaded
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory,flash
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash, jsonify
 from werkzeug.utils import secure_filename
 # Initialize the Flask application
 app = Flask(__name__)
@@ -18,6 +18,14 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 # These are the extension that we are accepting to be uploaded
 app.config['ALLOWED_EXTENSIONS'] = set(['jpg', 'jpeg'])
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
+
+DRUG_INFO = {
+    'bromhexine': {'name': 'Bromhexine [hydrochloride]', 'dose': '8 mg'},
+    'chlorpheniramine': {'name': 'Chlorpheniramine maleate', 'dose': '4 mg'},
+    'hydroxyzine': {'name': 'Hydroxyzine-fc', 'dose': '10 mg'},
+    'para': {'name': 'Paracetamol', 'dose': '500 mg'},
+    'other': {'name': 'ยาชนิดอื่นๆ', 'dose': ''}
+}
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
@@ -53,6 +61,25 @@ def upload():
         # Redirect the user to the uploaded_file route, which
         # will basicaly show on the browser the uploaded file
         return render_template('upload_success.html')
+
+@app.route('/api/predict', methods=['POST'])
+def api_predict():
+    file = request.files.get('file')
+    if not file or not allowed_file(file.filename):
+        return jsonify({'error': 'Invalid file'}), 400
+    filename = secure_filename(file.filename)
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(file_path)
+    with tf.Graph().as_default():
+        label, score = prediction(file_path)
+    info = DRUG_INFO.get(label, {'name': label, 'dose': ''})
+    return jsonify({
+        'label': label,
+        'score': score,
+        'name': info['name'],
+        'dose': info['dose']
+    })
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
